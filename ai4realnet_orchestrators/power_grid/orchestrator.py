@@ -4,6 +4,7 @@ import os
 import ssl
 from typing import List
 
+from ai4realnet_orchestrators.power_grid.test_runner_kpi_cf_012_power_grid import TestRunner_KPI_CF_012_Power_Grid
 from celery import Celery
 
 from ai4realnet_orchestrators.orchestrator import Orchestrator
@@ -136,10 +137,11 @@ power_grid_orchestrator = Orchestrator(
         #         test_id="58ce79e0-5c14-4c51-8d09-89f856361259", scenario_ids=['1294d425-66bd-4510-b4b3-d9f64ca0e4f9'], benchmark_id="3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
         #     ),
         #
-        #     # KPI-CF-012: Carbon intensity (Power Grid)
-        #     "ab91af79-ffc3-4da7-916a-6574609dc1b6": TestRunner_KPI_CF_012_Power_Grid(
-        #         test_id="ab91af79-ffc3-4da7-916a-6574609dc1b6", scenario_ids=['75d20248-740b-4d84-86e7-1de89f10fc1e'], benchmark_id="4b0be731-8371-4e4e-a673-b630187b0bb8"
-        #     ),
+
+        # KPI-CF-012: Carbon intensity (Power Grid)
+        "ab91af79-ffc3-4da7-916a-6574609dc1b6": TestRunner_KPI_CF_012_Power_Grid(
+            test_id="ab91af79-ffc3-4da7-916a-6574609dc1b6", scenario_ids=['75d20248-740b-4d84-86e7-1de89f10fc1e'], benchmark_id="4b0be731-8371-4e4e-a673-b630187b0bb8"
+        )
         #
         #     # KPI-TF-034: Topological action complexity (Power Grid)
         #     "0b8c02c6-0120-431c-872f-0fb4bc8d5fba": TestRunner_KPI_TF_034_Power_Grid(
