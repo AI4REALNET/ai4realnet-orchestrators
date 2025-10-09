@@ -1,0 +1,6 @@
+{
+    "75d20248-740b-4d84-86e7-1de89f10fc1e": {
+        "scenario_base_path": "/opt/ai4realnet/grid2op-scenario",
+        "scenario_recorder_path": "/tmp/ai4realnet"
+    }
+}

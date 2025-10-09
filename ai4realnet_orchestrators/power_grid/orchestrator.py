@@ -4,13 +4,13 @@ import os
 import ssl
 from typing import List
 
-from ai4realnet_orchestrators.power_grid.test_runner_kpi_cf_012_power_grid import TestRunner_KPI_CF_012_Power_Grid
 from celery import Celery
 
 from ai4realnet_orchestrators.orchestrator import Orchestrator
 
 # NOTE: import YourTestRunner implementations here
 # from ai4realnet_orchestrators.power_grid.test_runner import YourTestRunner
+from ai4realnet_orchestrators.power_grid.test_runner_kpi_cf_012_power_grid import TestRunner_KPI_CF_012_Power_Grid
 
 logger = logging.getLogger(__name__)
 
