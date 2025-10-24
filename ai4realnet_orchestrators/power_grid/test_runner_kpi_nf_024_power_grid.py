@@ -2,7 +2,6 @@ from ai4realnet_orchestrators.power_grid.power_grid_test_runner import PowerGrid
 from grid2evaluate.agent_runnner import AgentRunner
 from grid2evaluate.network_utilization_kpi import NetworkUtilizationKpi
 from pathlib import Path
-import os
 
 class TestRunner_KPI_NF_024_Power_Grid(PowerGridTestRunner):
 
