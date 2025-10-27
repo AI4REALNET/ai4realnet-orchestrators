@@ -14,6 +14,7 @@ from ai4realnet_orchestrators.power_grid.test_runner_kpi_cf_012_power_grid impor
 #from ai4realnet_orchestrators.power_grid.test_runner_kpi_nf_024_power_grid import TestRunner_KPI_NF_024_Power_Grid
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_of_036_power_grid import TestRunner_KPI_OF_036_Power_Grid
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_tf_034_power_grid import TestRunner_KPI_TF_034_Power_Grid
+from ai4realnet_orchestrators.power_grid.test_runner_kpi_af_008_power_grid import TestRunner_KPI_AF_008_Power_Grid
 
 
 logger = logging.getLogger(__name__)
@@ -126,10 +127,10 @@ power_grid_orchestrator = Orchestrator(
         #         test_id="67f77d51-0893-4cbd-b349-b73bd2f73db2", scenario_ids=['6958bf4c-39ff-484f-b609-25500e9e314a'], benchmark_id="65547935-f436-49fa-8d20-f320c6bd46dc"
         #     ),
         #
-        #     # KPI-AF-008: Assistant alert accuracy (Power Grid)
-        #     "aba10b3f-0d5c-4f90-aec4-69460bbb098b": TestRunner_KPI_AF_008_Power_Grid(
-        #         test_id="aba10b3f-0d5c-4f90-aec4-69460bbb098b", scenario_ids=['729cc815-ac93-4209-9f62-b57b920c2d0a'], benchmark_id="3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
-        #     ),
+        # KPI-AF-008: Assistant alert accuracy (Power Grid)
+        "aba10b3f-0d5c-4f90-aec4-69460bbb098b": TestRunner_KPI_AF_008_Power_Grid(
+            test_id="aba10b3f-0d5c-4f90-aec4-69460bbb098b", scenario_ids=['729cc815-ac93-4209-9f62-b57b920c2d0a'], benchmark_id="3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
+        ),
         #
         # KPI-NF-024: Network utilization (Power Grid)
         #"5d1db79c-a7a4-4060-bb03-4629d64b1a43": TestRunner_KPI_NF_024_Power_Grid(
