@@ -36,4 +36,3 @@ def exec_with_logging(exec_args: List[str], log_level_stdout=logging.DEBUG, log_
         print(stderr)
         logger.error(stderr)
         raise RuntimeError(f"Failed to run {exec_args}. Stdout={stdout}. Stderr={stderr}") from exception
-    
