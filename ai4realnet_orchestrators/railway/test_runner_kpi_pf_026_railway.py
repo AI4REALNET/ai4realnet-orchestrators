@@ -47,7 +47,7 @@ class TestRunner_KPI_PF_026_Railway(AbtractTestRunnerRailway):
     logger.info(f"num_agents: {num_agents}")
 
     agent_scores = df_trains_rewards_dones_infos["reward"].to_list()
-    logger.info(f"agent_scores: {agent_scores}")
+    logger.debug(f"agent_scores: {agent_scores[:10]}...")
     punctuality = mean_punctuality_aggregator(agent_scores)
     logger.info(f"punctuality: {punctuality}")
 
