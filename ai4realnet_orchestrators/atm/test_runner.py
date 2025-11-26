@@ -13,12 +13,67 @@ class BlueSkyRunner(TestRunner):
     def run_scenario(self, scenario_id: str, submission_id: str):
         # here you would implement the logic to run the test for the scenario:
         args = ["bluesky", "--detached", "--workdir", WORKDIR, "--scenfile", scenario_id]
+        marker_path = pathlib.Path(WORKDIR) / "current_scenfile.txt"
+        marker_path.write_text(scenario_id)
+
         exec_with_logging(args)
 
         # Read the generated data file
-        files = list(pathlib.Path(WORKDIR).glob("*.csv"))
-        latest = max(files, key=os.path.getctime)
-        data = pd.read_csv(latest, comment="#")
+        output_dir = pathlib.Path(WORKDIR) / "output"
+
+        # # Test implementation gets the latest file
+        # files = list(output_dir.glob("*.csv"))
+        # latest = max(files, key=os.path.getctime)
+        # data = pd.read_csv(latest, comment="#")
+
+        # Gets the specific file for the scenario
+        scenario_csv = output_dir / f"{scenario_id}_log.csv"
+        if not scenario_csv.exists():
+            raise RuntimeError(f"Expected output file not found: {scenario_csv}")
+        data = pd.read_csv(scenario_csv, comment="#")
+
+        # if scenario_is is ...
+        # compute primary score accordingly
+        # elif scenrio_id is ...
+        # etc
+
+        # test implementation
+        primary_score = float(data['hdg'].mean())
         return {
-          "primary": data,
+          "primary": primary_score,
         }
+
+
+# class BlueSkyRunner(TestRunner):
+#     def run_scenario(self, scenario_id: str, submission_id: str):
+#         # here you would implement the logic to run the test for the scenario:
+#         args = ["bluesky", "--workdir", WORKDIR, "--scenfile", scenario_id]
+#         marker_path = pathlib.Path(WORKDIR) / "current_scenfile.txt"
+#         marker_path.write_text(scenario_id)
+#         # print('working dir:', os.getcwd(), 'WORKDIR:', WORKDIR)
+#         exec_with_logging(args)
+
+#         # Read the generated data file
+#         output_dir = pathlib.Path(WORKDIR) / "output"
+
+#         # # Test implementation gets the latest file
+#         # files = list(output_dir.glob("*.csv"))
+#         # latest = max(files, key=os.path.getctime)
+#         # data = pd.read_csv(latest, comment="#")
+
+#         # Gets the specific file for the scenario
+#         scenario_csv = output_dir / f"{scenario_id}_log.csv"
+#         if not scenario_csv.exists():
+#             raise RuntimeError(f"Expected output file not found: {scenario_csv}")
+#         data = pd.read_csv(scenario_csv, comment="#")
+
+#         # if scenario_is is ...
+#         # compute primary score accordingly
+#         # elif scenrio_id is ...
+#         # etc
+
+#         # test implementation
+#         primary_score = float(data['hdg'].mean())
+#         return {
+#             "primary": primary_score,
+#         }
