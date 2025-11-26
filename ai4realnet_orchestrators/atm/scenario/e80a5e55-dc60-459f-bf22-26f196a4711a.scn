@@ -4,16 +4,11 @@
 #   Date: Nov 2025
 #
 #   Instructions: 
-#   - in BlueSky, load 'PLUGIN deployRL_batch',
-#   - load the scenario using 'DETACHED_BATCH ai4realnet_deploy_RL_batch.scn'
+#   - the batch scenario loaded is contained in the file 'ai4realnet_deploy_RL_batch.scn'
+#   - the parameters of the scenario can be modified in that file directly. 
+#     Specific parameters hardcoded in the plugin can be made accessible from
+#     the scenario file upon request.
 #
-#   Available Environments: 
-#   - StaticObstacleEnv-v0, 
-#   - StaticObstacleCREnv-v0, 
-#   - StaticObstacleSectorEnv-v0, 
-#   - StaticObstacleSectorCREnv-v0
-#
-#   Available Algorithms: sac, ddpg, td3, ppo
 #-------------------------------------------------------------------------------
 
 00:00:00.00>plugin deployRL_batch
