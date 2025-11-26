@@ -28,7 +28,6 @@ def exec_with_logging(exec_args: List[str], log_level_stdout=logging.DEBUG, log_
         stdo = log_subprocess_output(TextIOWrapper(BytesIO(stdout)), level=log_level_stdout, label=str(exec_args), collect=collect)
         stde = log_subprocess_output(TextIOWrapper(BytesIO(stderr)), level=log_level_stderr, label=str(exec_args), collect=collect)
         logger.debug("\\ End %s", exec_args)
-
         if proc.returncode != 0:
             raise RuntimeError(f"Failed to run {exec_args} with returncode={proc.returncode}. Stdout={stdout}. Stderr={stderr}")
         return stdo, stde
@@ -37,3 +36,4 @@ def exec_with_logging(exec_args: List[str], log_level_stdout=logging.DEBUG, log_
         print(stderr)
         logger.error(stderr)
         raise RuntimeError(f"Failed to run {exec_args}. Stdout={stdout}. Stderr={stderr}") from exception
+    
