@@ -2,6 +2,7 @@ name: Checks
 
 env:
   # DEPENDENCY SWITCH:
+  # TODO use released version
   flatland-benchmarks-ref: main
 
 on:
