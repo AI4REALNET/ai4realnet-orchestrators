@@ -15,6 +15,7 @@ from testcontainers.compose import DockerCompose
 from ai4realnet_orchestrators.fab_oauth_utils import backend_application_flow
 from ai4realnet_orchestrators.s3_utils import s3_utils
 from fab_clientlib import DefaultApi, Configuration, ApiClient
+from fab_clientlib.models.submissions_post_request import SubmissionsPostRequest
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,7 @@ def run_task(task_queue_name: str, submission_id: str, submission_data_url: str,
 @pytest.mark.usefixtures("test_containers_fixture")
 @pytest.mark.integration
 def test_runner_kpi_pf_026_railway():
+  benchmark_id = "3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
   task_queue_name = 'Railway'  # Celery: queue name = task name
   submission_id = str(uuid.uuid4())  # Celery: task ID
   test_id = "98ceb866-5479-47e6-a735-81292de8ca65"  # Celery: passed in "tests" key of kwargs when Celery task is submitted
@@ -124,7 +126,7 @@ def test_runner_kpi_pf_026_railway():
     assert test_results.scorings[0].field_key == "punctuality"
     assert test_results.scorings[0].score == 0.9642857142857143
 
-  _generic_run(submission_data_url, submission_id, task_queue_name, test_id, _verify_kpi_pf_026)
+  _generic_run(benchmark_id, submission_data_url, submission_id, task_queue_name, test_id, _verify_kpi_pf_026)
 
   s3 = s3_utils.get_boto_client("minioadmin", "minioadmin", "http://localhost:9000")
   for scenario_id, expected_keys in {
@@ -190,6 +192,7 @@ def test_runner_kpi_pf_026_railway():
 @pytest.mark.usefixtures("test_containers_fixture")
 @pytest.mark.integration
 def test_runner_kpi_nf_045_railway():
+  benchmark_id = "4b0be731-8371-4e4e-a673-b630187b0bb8"
   task_queue_name = 'Railway'  # Celery: queue name = task name
   submission_id = str(uuid.uuid4())  # Celery: task ID
   test_id = "e075d4a7-5cda-4d3c-83ac-69a0db1d74dd"  # Celery: passed in "tests" key of kwargs when Celery task is submitted
@@ -223,7 +226,7 @@ def test_runner_kpi_nf_045_railway():
     assert test_results.scorings[0].field_key == "network_impact_propagation"
     assert test_results.scorings[0].score == 0.9285714285714286
 
-  _generic_run(submission_data_url, submission_id, task_queue_name, test_id, _verify_kpi_nf_045)
+  _generic_run(benchmark_id, submission_data_url, submission_id, task_queue_name, test_id, _verify_kpi_nf_045)
 
   s3 = s3_utils.get_boto_client("minioadmin", "minioadmin", "http://localhost:9000")
   for scenario_id, expected_key in {
@@ -324,8 +327,22 @@ def test_runner_kpi_nf_045_railway():
     assert len(listing["Contents"]) > 0
 
 
-def _generic_run(submission_data_url, submission_id, task_queue_name, test_id, verify):
+def _generic_run(benchmark_id, submission_data_url, submission_id, task_queue_name, test_id, verify):
   try:
+    token = backend_application_flow(
+      client_id='fab-client-credentials',
+      client_secret='top-secret',
+      token_url='http://localhost:8081/realms/flatland/protocol/openid-connect/token',
+    )
+    print(token)
+    fab = DefaultApi(ApiClient(configuration=Configuration(host="http://localhost:8000", access_token=token["access_token"])))
+    fab.submissions_post(SubmissionsPostRequest(
+      name="fancy",
+      benchmark_id=benchmark_id,
+      submission_id=submission_id,
+      test_ids=[test_id]
+    ))
+
     run_task(task_queue_name, submission_id, submission_data_url, tests=[test_id])
 
     token = backend_application_flow(
