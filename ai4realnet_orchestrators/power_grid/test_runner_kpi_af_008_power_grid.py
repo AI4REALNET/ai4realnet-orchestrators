@@ -15,7 +15,24 @@ class TestRunner_KPI_AF_008_Power_Grid(PowerGridTestRunner):
     kpi = AssistantAlertAccuracyKpi()
     kpi_result = kpi.evaluate(input_directory)
 
-    primary_kpi_value = 33 #dummy value
+    if len(kpi_result)==0:
+      return{
+        "primary": 0
+      }
+
+    TP=sum([kpi_result[i][0] for i in range(len(kpi_result))])
+    TN=sum([kpi_result[i][1] for i in range(len(kpi_result))])
+    FP=sum([kpi_result[i][2] for i in range(len(kpi_result))])
+    FN=sum([kpi_result[i][3] for i in range(len(kpi_result))])
+
+    if TP==0:
+      return{
+        "primary": 0
+      }
+
+    P = TP/(TP+FP)
+    R = TP/(TP+FN)
+    primary_kpi_value=2*(P*R)/(P+R)
 
     return {
       "primary": primary_kpi_value
