@@ -2,7 +2,8 @@ name: Checks
 
 env:
   # DEPENDENCY SWITCH:
-  flatland-benchmarks-ref: main
+  # TODO use released version
+  flatland-benchmarks-ref: backend-rationality-check-results
 
 on:
   workflow_dispatch:
