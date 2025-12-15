@@ -2,7 +2,6 @@ from abc import abstractmethod
 import os
 from ai4realnet_orchestrators.test_runner import TestRunner
 from grid2evaluate.agent_runnner import AgentRunner
-from grid2evaluate.carbon_intensity_kpi import CarbonIntensityKpi
 from pathlib import Path
 import json
 import requests

@@ -11,7 +11,7 @@ from ai4realnet_orchestrators.orchestrator import Orchestrator
 # NOTE: import YourTestRunner implementations here
 # from ai4realnet_orchestrators.power_grid.test_runner import YourTestRunner
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_cf_012_power_grid import TestRunner_KPI_CF_012_Power_Grid
-#from ai4realnet_orchestrators.power_grid.test_runner_kpi_nf_024_power_grid import TestRunner_KPI_NF_024_Power_Grid
+from ai4realnet_orchestrators.power_grid.test_runner_kpi_nf_024_power_grid import TestRunner_KPI_NF_024_Power_Grid
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_of_036_power_grid import TestRunner_KPI_OF_036_Power_Grid
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_tf_034_power_grid import TestRunner_KPI_TF_034_Power_Grid
 from ai4realnet_orchestrators.power_grid.test_runner_kpi_af_008_power_grid import TestRunner_KPI_AF_008_Power_Grid
@@ -133,9 +133,9 @@ power_grid_orchestrator = Orchestrator(
         ),
         #
         # KPI-NF-024: Network utilization (Power Grid)
-        #"5d1db79c-a7a4-4060-bb03-4629d64b1a43": TestRunner_KPI_NF_024_Power_Grid(
-        #    test_id="5d1db79c-a7a4-4060-bb03-4629d64b1a43", scenario_ids=['ed8ba2fc-853e-4e79-a984-b1986b9b6e97'], benchmark_id="3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
-        #),
+        "5d1db79c-a7a4-4060-bb03-4629d64b1a43": TestRunner_KPI_NF_024_Power_Grid(
+                test_id="5d1db79c-a7a4-4060-bb03-4629d64b1a43", scenario_ids=['ed8ba2fc-853e-4e79-a984-b1986b9b6e97'], benchmark_id="3b1bdca6-ed90-4938-bd63-fd657aa7dcd7"
+            ),
         #
         #     # KPI-TS-035: Total decision time (Power Grid)
         #     "58ce79e0-5c14-4c51-8d09-89f856361259": TestRunner_KPI_TS_035_Power_Grid(
