@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 import numpy as np
 from flatland.trajectories.trajectories import Trajectory
@@ -24,16 +25,14 @@ class TestRunner_KPI_PF_026_Railway(AbtractTestRunnerRailway):
     data_dir = f"{DATA_VOLUME_MOUNTPATH}/{submission_id}/{self.test_id}/{scenario_id}"
     generate_policy_args = [
       "--data-dir", data_dir,
-      "--policy-pkg", "flatland_baselines.deadlock_avoidance_heuristic.policy.deadlock_avoidance_policy", "--policy-cls", "DeadLockAvoidancePolicy",
-      "--obs-builder-pkg", "flatland_baselines.deadlock_avoidance_heuristic.observation.full_env_observation", "--obs-builder-cls", "FullEnvObservation",
       "--rewards-pkg", "flatland.envs.rewards", "--rewards-cls", "PunctualityRewards",
       "--ep-id", scenario_id,
-      "--env-path", f"{SCENARIOS_VOLUME_MOUNTPATH}/{env_path}"
+      "--env-path", f"{SCENARIOS_VOLUME_MOUNTPATH}/{env_path}",
+      "--snapshot-interval", "10",
     ]
     self.exec(generate_policy_args, scenario_id, submission_id, f"{submission_id}/{self.test_id}/{scenario_id}")
 
-    trajectory = Trajectory(data_dir=data_dir, ep_id=scenario_id)
-    trajectory.load()
+    trajectory = Trajectory.load_existing(data_dir=Path(data_dir), ep_id=scenario_id)
 
     df_trains_arrived = trajectory.trains_arrived
     logger.info(f"trains arrived: {df_trains_arrived}")
@@ -48,11 +47,11 @@ class TestRunner_KPI_PF_026_Railway(AbtractTestRunnerRailway):
     logger.info(f"num_agents: {num_agents}")
 
     agent_scores = df_trains_rewards_dones_infos["reward"].to_list()
-    logger.info(f"agent_scores: {agent_scores}")
+    logger.debug(f"agent_scores: {agent_scores[:10]}...")
     punctuality = mean_punctuality_aggregator(agent_scores)
     logger.info(f"punctuality: {punctuality}")
 
-    # TODO upload trajectory to s3
+    self.upload_and_empty_local(submission_id=submission_id, scenario_id=scenario_id)
 
     return {
       'punctuality': punctuality,

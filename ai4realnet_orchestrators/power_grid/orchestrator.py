@@ -183,10 +183,10 @@ power_grid_orchestrator = Orchestrator(
         #         test_id="1409dbf6-0f66-4570-97df-fda84c46c71d", scenario_ids=['547f8244-d091-40da-892d-ee24a26ee29f'], benchmark_id="16706c82-75df-4969-932d-a7f5c941eca2"
         #     ),
         #
-        #     # KPI-DF-052: Domain shift adaptation time (Power Grid)
-        #     "855729a4-6729-4ae2-bb8d-443ef4867d94": TestRunner_KPI_DF_052_Power_Grid(
-        #         test_id="855729a4-6729-4ae2-bb8d-443ef4867d94", scenario_ids=['81f18394-0164-4896-9408-4315bcfcc5e0'], benchmark_id="43040944-39ac-47c9-b91d-bc8ca5693b3c"
-        #     ),
+            # KPI-DF-052: Domain shift adaptation time (Power Grid)
+            "855729a4-6729-4ae2-bb8d-443ef4867d94": TestRunner_KPI_DF_052_Power_Grid(
+                test_id="855729a4-6729-4ae2-bb8d-443ef4867d94", scenario_ids=['81f18394-0164-4896-9408-4315bcfcc5e0'], benchmark_id="43040944-39ac-47c9-b91d-bc8ca5693b3c"
+            ),
         #
         #     # KPI-DF-053: Domain shift generalization gap (Power Grid)
         #     "17b805b2-b773-4c22-8ba9-598780e7a40d": TestRunner_KPI_DF_053_Power_Grid(
