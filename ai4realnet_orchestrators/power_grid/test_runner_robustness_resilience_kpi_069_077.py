@@ -48,6 +48,9 @@ if _parent_dir not in sys.path:
 
 from test_runner import TestRunner
 
+# KPI-RF-078 target; defined next to the metric it belongs to.
+from evaluation_framework.metrics import REWARD_PER_ACTION_TARGET_RATIO
+
 logger = logging.getLogger(__name__)
 
 # ============================================================================
@@ -102,6 +105,13 @@ KPI_MAPPING = {
         "name": "KPI-SF-077: Similarity to unperturbed state",
         "metric_key": "state_similarity",
         "description": "Cosine similarity to unperturbed states [-1 to 1]"
+    },
+
+    # Robustness KPI (Benchmark: 3810191b-8cfd-4b03-86b2-f7e530aab30d)
+    "95ba1e9a-8d72-4c0e-9526-7676f70ff067": {
+        "name": "KPI-RF-078: Reward per action",
+        "metric_key": "reward_per_action_ratio",
+        "description": "Perturbed reward-per-action as a fraction of the unperturbed baseline [0-1+]"
     },
 }
 
@@ -355,6 +365,7 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
         degradation_times = []
         restoration_times = []
         state_similarities = []
+        reward_per_action_ratios = []
         
         for m in metrics_dicts:
             logger.info(f"\n{'='*60}")
@@ -393,6 +404,10 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
             
             # State similarity
             state_sim = np.mean([np.mean(ep) for ep in m.cos_similarity_all])
+
+            # KPI-RF-078: pooled within this attacker as sum(reward)/sum(actions),
+            # see metrics.aggregate_reward_per_action().
+            rpa_ratio = m.reward_per_action["reward_per_action_ratio"]
             
             # Print all metrics for this attacker
             logger.info(f"  Robustness Metrics:")
@@ -406,6 +421,8 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
             logger.info(f"    - Degradation Time:     {degr:.1f}")
             logger.info(f"    - Restoration Time:     {rest:.1f}")
             logger.info(f"    - State Similarity:     {state_sim:.4f}")
+            logger.info(f"    - Reward/Action Ratio:  {rpa_ratio:.4f} "
+                        f"(target >= {REWARD_PER_ACTION_TARGET_RATIO})")
             
             # Append to lists
             vulnerability_scores.append(vuln)
@@ -417,6 +434,7 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
             degradation_times.append(degr)
             restoration_times.append(rest)
             state_similarities.append(state_sim)
+            reward_per_action_ratios.append(rpa_ratio)
         
         # Compute means across attackers
         aggregated = {
@@ -432,6 +450,12 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
             'degradation_time': np.mean(degradation_times),
             'restoration_time': np.mean(restoration_times),
             'state_similarity': np.mean(state_similarities),
+
+            # KPI-RF-078. Mean across ATTACKERS, matching every other KPI here; the
+            # pooling that matters (sum(reward)/sum(actions)) already happened across
+            # episodes inside each attacker's metrics object. Attackers whose ratio is
+            # undefined (no actions taken at all) are skipped rather than poisoning it.
+            'reward_per_action_ratio': self._mean_defined(reward_per_action_ratios),
         }
         
         logger.info(f"\n{'='*60}")
@@ -650,6 +674,28 @@ class MultiAttackerRobustnessTestRunner(TestRunner):
         
         return agent
     
+    @staticmethod
+    def _mean_defined(values):
+        """
+        Mean over the entries that are defined, ignoring NaN.
+
+        KPI-RF-078 is NaN for an attacker against which the agent never acted, and for
+        submissions evaluated from pickles that predate the baseline action stream. Those
+        carry no information, so they are skipped rather than turned into a 0 that would
+        read as "no reward per action".
+
+        Returns:
+            float: mean of the defined values, or 0.0 when none are defined.
+        """
+        defined = [v for v in values if v is not None and np.isfinite(v)]
+        if not defined:
+            logger.warning(
+                "KPI-RF-078 is undefined for every attacker (no actions recorded, or "
+                "pickles predate the baseline action stream); reporting 0.0"
+            )
+            return 0.0
+        return float(np.mean(defined))
+
     def _load_agent_from_docker(self, url: str):
         """
         Load agent from Docker image.
@@ -710,4 +756,8 @@ class TestRunner_KPI_RF_076_Power_Grid(MultiAttackerRobustnessTestRunner):
 
 class TestRunner_KPI_SF_077_Power_Grid(MultiAttackerRobustnessTestRunner):
     """KPI-SF-077: Similarity state to unperturbed situation"""
+    pass
+
+class TestRunner_KPI_RF_078_Power_Grid(MultiAttackerRobustnessTestRunner):
+    """KPI-RF-078: Reward per action"""
     pass
